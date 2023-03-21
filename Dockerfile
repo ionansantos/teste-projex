@@ -10,5 +10,7 @@ COPY . /var/www/html
 # Install the required PHP extensions
 RUN docker-php-ext-install pdo_mysql
 
+RUN a2enmod rewrite
+
 # Expose the port 80
 EXPOSE 80

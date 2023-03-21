@@ -13,7 +13,7 @@ services:
 
   php:
     build: .
-    container_name: app
+    container_name: api
     ports:
       - "8000:80"
     volumes:
