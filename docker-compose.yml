@@ -1,33 +1,69 @@
 version: '3'
 
 services:
-  database:
-    image: postgres:${POSTGRES_VERSION:-15}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
-    volumes:
-      - database_data:/var/lib/postgresql/data:rw
+  app:
+      build:
+          context: .
+          dockerfile: Dockerfile
+      container_name: app
+      ports:
+        - 80:80
+      volumes:
+        - .:/var/www
+      networks:
+        - default
+      depends_on:
+        - db
+      links:
+        - db
 
-  php:
-    build: .
-    container_name: api
-    ports:
-      - "8000:80"
-    volumes:
-      - .:/var/www/html
-    depends_on:
-      - database
-
-  frontend:
-    image: nginx:latest
-    container_name: frontend
-    ports:
-      - "8001:80"
-    volumes:
-      - ./public/app:/usr/share/nginx/html
-
+  db:
+      image: 'mysql:8.0'
+      container_name: database
+      ports:
+        -  '3306:3306'
+      environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ROOT_HOST: "%"
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      volumes:
+          - /var/lib/mysql
+          - 'sail-mysql:/var/lib/mysql'
+          - './apache/:/docker-entrypoint-initdb.d/'
+          # - /var/www/storage/app/prestadores-docs:/var/www/storage/app/prestadores-docs
+          # - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+      networks:
+          - default
+      healthcheck:
+          test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+          retries: 3
+          timeout: 5s
+  phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8080:80
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_PASSWORD=1234
+        links:
+            - db
+        networks:
+            - default
+  mailhog:
+      image: mailhog/mailhog:latest
+      restart: always
+      ports:
+        - 1025:1025
+        - 8025:8025
+networks:
+    sail:
+        driver: bridge
+    default:
+        driver: bridge
 volumes:
-  database_data:
+    sail-mysql:
+        driver: local

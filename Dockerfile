@@ -1,16 +1,24 @@
 # Use an official PHP runtime as a parent image
-FROM php:7.4-apache
+FROM php:8.1-apache
 
 # Set the working directory
-WORKDIR /var/www/html
+WORKDIR /var/www
 
-# Copy the contents of the Symfony project to the container
-COPY . /var/www/html
+RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable mysqli pdo pdo_mysql
+RUN chown -R www-data:www-data /var/www
 
-# Install the required PHP extensions
-RUN docker-php-ext-install pdo_mysql
+COPY composer.json .
+COPY composer.lock .
+COPY package*.json ./
 
+COPY --from=composer/composer /usr/bin/composer /usr/bin/composer
+
+RUN cd /etc/apache2/mods-available
 RUN a2enmod rewrite
+RUN rm -f /etc/apache2/apache2.conf
+COPY /apache/apache2.conf /etc/apache2
 
-# Expose the port 80
-EXPOSE 80
+RUN rm -f /etc/apache2/sites-available/000-default.conf
+COPY /apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+
