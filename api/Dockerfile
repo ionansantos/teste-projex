@@ -1,35 +1,38 @@
-# Use a imagem PHP e Apache como base
+# Define a imagem base
 FROM php:8.1-apache
 
-# Defina o diretório de trabalho
-WORKDIR /var/www/html/api
-
-# Atualize os pacotes e instale as dependências necessárias
+# Atualiza a lista de pacotes e instala dependências necessárias
 RUN apt-get update && apt-get install -y \
-    git \
+    libicu-dev \
+    libpq-dev \
+    zlib1g-dev \
     unzip \
-    libzip-dev \
-    libpq-dev 
+    && rm -rf /var/lib/apt/lists/*
 
-# Instale as extensões PHP necessárias
-RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable mysqli pdo pdo_mysql
+# Instala extensões PHP necessárias
+RUN docker-php-ext-install \
+    intl \
+    pdo \
+    pdo_pgsql \
+    opcache \
+    && a2enmod rewrite
 
-# Copie todos os arquivos do projeto Symfony para o contêiner
-COPY . .
+# Copia os arquivos do aplicativo para o contêiner
+COPY . /var/www/html
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
-# Instale o Composer
+# Define o diretório de trabalho
+WORKDIR /var/www/html
+
+# Instala as dependências do Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install --no-scripts --no-autoloader
 
-# Instale as dependências do Symfony usando o Composer
-RUN composer install
+# Define as permissões corretas
+RUN chown -R www-data:www-data /var/www/html
 
-# Configure o Apache e habilite o mod_rewrite
-RUN a2enmod rewrite
-COPY apache/apache2.conf /etc/apache2/apache2.conf
-COPY apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-
-# Expor a porta 80 do contêiner
+# Expõe a porta do Apachex
 EXPOSE 80
 
-# Inicialize o servidor Apache
+# Executa o servidor Apache
 CMD ["apache2-foreground"]

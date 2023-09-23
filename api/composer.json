@@ -11,10 +11,8 @@
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.3.*",
-        "symfony/runtime": "6.3.*",
+        "symfony/runtime": "^6.3",
         "symfony/yaml": "6.3.*"
-    },
-    "require-dev": {
     },
     "config": {
         "allow-plugins": {
@@ -63,5 +61,9 @@
             "allow-contrib": false,
             "require": "6.3.*"
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.51",
+        "symfony/web-profiler-bundle": "6.3.*"
     }
 }

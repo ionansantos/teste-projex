@@ -30,7 +30,7 @@ services:
     volumes:
       - "/var/lib/mysql"
       - "mysql:/var/lib/mysql"
-      - "/apache/:/docker-entrypoint-initdb.d"
+      - "./:/docker-entrypoint-initdb.d"
 # Outras configurações, como volumes, redes, etc., podem ser adicionadas conforme necessário.
 volumes:
   mysql:
