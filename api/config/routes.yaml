@@ -1,5 +1,4 @@
-controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+api:
+    resource: routes/api.yaml
+    name_prefix: api_
+    prefix: api/v1
