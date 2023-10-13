@@ -1,9 +1,0 @@
-user_login:
-    path: /login
-    defaults: { _controller: App\Controller\AuthController::login }
-    methods: GET
-
-user_register:
-    path: /register
-    defaults: { _controller: App\Controller\AuthController::register }
-    methods: GET

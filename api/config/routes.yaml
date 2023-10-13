@@ -1,4 +1,6 @@
-api:
-    resource: routes/api.yaml
-    name_prefix: api_
-    prefix: api/v1
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+api_login_check:
+    path: /api/login_check

@@ -2,17 +2,18 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\User;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home')]
-    public function index(): JsonResponse
+    #[Route('/home', name: 'app_home')]
+    public function index(ManagerRegistry $doctrine): Response
     {
-        return $this->json(
-            'bem vindo a api',
-        );
+        $users = $doctrine->getrepository(User::class)->findAll();
+        return $this->json($users);
     }
 }
