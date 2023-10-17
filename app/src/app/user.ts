@@ -1,9 +1,9 @@
 export class User {
-  nome: string; // Declare a propriedade
-  senha: string;
+  email: string; // Declare a propriedade
+  password: string;
 
   constructor() {
-    this.nome = ''; // Inicialize a propriedade no construtor
-    this.senha = '';
+    this.email = ''; // Inicialize a propriedade no construtor
+    this.password = '';
   }
 }

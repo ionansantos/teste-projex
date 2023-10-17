@@ -2,10 +2,10 @@ controllers:
     resource: ../src/Controller/
     type: attribute
 
+api_login_check:
+    path: /api/login_check
+
 api_register:
     path: /api/register
     controller: App\Controller\RegistrationController::index
     methods: [POST]
-
-api_login_check:
-    path: /api/login_check

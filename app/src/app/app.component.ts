@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './services/auth.service';
+import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +10,29 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   title = 'teste-projex';
 
-  showMenu: boolean = false;
+  private roles: string[] = [];
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showModeratorBoard = false;
+  username?: string;
+  // showMenu: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private storageService: StorageService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
-    this.authService.showMenuEmitter.subscribe(
-      (show) => (this.showMenu = show)
-    );
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles();
+
+      this.username = user.email;
+    }
+    // this.authService.showMenuEmitter.subscribe(
+    //   (show) => (this.showMenu = show)
+    // );
   }
 }

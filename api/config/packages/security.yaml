@@ -14,22 +14,22 @@ security:
         login:
             pattern: ^/api/login
             stateless: true
-            provider: app_user_provider
             json_login:
                 username_path: email
                 check_path: /api/login_check
+                provider: app_user_provider
                 success_handler:
                     lexik_jwt_authentication.handler.authentication_success
                 failure_handler:
                     lexik_jwt_authentication.handler.authentication_failure
         api:
-            pattern: ^/api
+            pattern:   ^/api
             stateless: true
             jwt: ~
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+        
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -45,6 +45,7 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS  }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/home, roles: ROLE_USER }
+        - { path: ^/api/test_api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
 when@test:
     security:

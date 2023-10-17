@@ -11,7 +11,9 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AuthService } from './services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { AuthGuard } from './guards/auth.guard';
-
+import { HttpClientModule } from '@angular/common/http';
+import { ProfileComponent } from './profile/profile.component';
+// import { httpInterceptorProviders } from '../app/helpers/ http.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,8 +22,9 @@ import { AuthGuard } from './guards/auth.guard';
     HeaderComponent,
     AuthComponent,
     SidebarComponent,
+    ProfileComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent],
 })
