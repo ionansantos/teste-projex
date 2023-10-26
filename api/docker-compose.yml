@@ -1,0 +1,60 @@
+version: "3"
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: app
+        ports:
+            - "80:80"
+        volumes:
+            - ".:/var/www"
+        networks:
+            - default
+        depends_on:
+            - db
+        links:
+            - db
+    db:
+        image: "mysql:8.0"
+        container_name: database
+        ports:
+            - "3366:3306"
+        environment:
+            MYSQL_ROOT_HOST: "${DB_HOST}"
+            MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+            MYSQL_DATABASE: "${DB_DATABASE}"
+            MYSQL_USER: "${DB_USERNAME}"
+            MYSQL_PASSWORD: "${DB_PASSWORD}"
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        volumes:
+            - "/var/lib/mysql"
+            - "sail-mysql:/var/lib/mysql"
+            - "./apache/:/docker-entrypoint-initdb.d"
+            - /var/www/storage/app/public/imagens:/var/www/storage/app/public/imagens
+        networks:
+            - default
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+            retries: 3
+            timeout: 5s
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8080:80
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_PASSWORD=1234
+        links:
+            - db
+        networks:
+            - default
+networks:
+    sail:
+        driver: bridge
+    default:
+        driver: bridge
+volumes:
+    sail-mysql:
+        driver: local
