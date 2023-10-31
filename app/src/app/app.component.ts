@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AuthService } from './services/auth.service';
-import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -14,23 +13,11 @@ export class AppComponent {
   isLoggedIn = false;
   showAdminBoard = false;
   showModeratorBoard = false;
-  username?: string;
   // showMenu: boolean = false;
 
-  constructor(
-    private storageService: StorageService,
-    private authService: AuthService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.isLoggedIn = this.storageService.isLoggedIn();
-
-    if (this.isLoggedIn) {
-      const user = this.storageService.getUser();
-      this.roles = user.roles();
-
-      this.username = user.email;
-    }
     // this.authService.showMenuEmitter.subscribe(
     //   (show) => (this.showMenu = show)
     // );

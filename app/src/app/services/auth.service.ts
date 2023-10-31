@@ -2,56 +2,71 @@ import { Router } from '@angular/router';
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../user';
-import { Subject } from 'rxjs';
+import { Observable, Subject, catchError, map, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private userAutenticate: boolean = false;
   private errorSubject = new Subject<string>();
 
-  constructor(private router: Router, private http: HttpClient) {}
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  };
 
-  login(user: User) {
-    const requestData = {
-      email: user.email, // Acesse a propriedade username do objeto user
-      password: user.password, // Acesse a propriedade password do objeto user
+  constructor(private http: HttpClient, public router: Router) {}
+
+  login(email: string, password: string): Observable<any> {
+    return this.http
+      .post(`${environment.API}/login`, { email, password }, this.httpOptions)
+      .pipe(
+        map((response: any) => {
+          if (response.token) {
+            localStorage.setItem('access_token', response.token);
+            this.router.navigate(['/']);
+            return response;
+          } else {
+            throw new Error('Token não encontrado na resposta.');
+          }
+        })
+      );
+  }
+
+  logout(): Observable<any> {
+    const token = localStorage.getItem('access_token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
     };
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    this.http
-      .post(`${environment.API}/login_check`, requestData, {
-        headers,
+    return this.http.post(`${environment.API}/logout`, {}, httpOptions).pipe(
+      catchError((error) => {
+        console.error('Error:', error);
+        return throwError(error);
       })
-      .subscribe(
-        (response) => {
-          this.userAutenticate = true;
-          this.router.navigate(['/']);
-          // this.showMenuEmitter.emit(true);
-          console.log('Resposta do servidor:', response);
-        },
-        (error) => {
-          this.errorSubject.next('Email ou Senha Incorreto.');
-          console.error('Erro na requisição:', error);
-        }
-      );
-
-    // if (user.email === 'ionan' && user.password === '123') {
-    //   this.userAutenticate = true;
-
-    //   this.router.navigate(['/']);
-
-    //   this.showMenuEmitter.emit(true);
-    // } else {
-    //   this.userAutenticate = false;
-    //   this.showMenuEmitter.emit(false);
-    // }
+    );
   }
+
+  // logout() {
+  //   const token = localStorage.getItem('access_token');
+
+  //   const httpOptions = {
+  //     headers: new HttpHeaders().set('Authorization', 'Bearer ' + token),
+  //   };
+
+  //   this.http.post(`${environment.API}/logout`, httpOptions).subscribe(
+  //     (response: any) => {
+  //       localStorage.removeItem('access_token');
+  //       this.router.navigate(['/login']);
+  //       console.log('Logout successful', response);
+  //     },
+  //     (error) => {
+  //       console.error('Logout error:', error);
+  //     }
+  //   );
+  // }
 
   // logout(): Observable<any> {
   //   return this.http.post(`${environment.API}/signout`);
@@ -59,9 +74,5 @@ export class AuthService {
 
   getErrorSubject() {
     return this.errorSubject.asObservable();
-  }
-
-  verifyUserAutenticate() {
-    return this.userAutenticate;
   }
 }

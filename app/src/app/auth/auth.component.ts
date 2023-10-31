@@ -1,7 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { User } from '../user';
-import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +8,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent implements OnInit {
-  user: User = new User();
+  form: any = {
+    email: null,
+    password: null,
+  };
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
@@ -18,46 +19,22 @@ export class AuthComponent implements OnInit {
 
   // private userAutenticate: boolean = false;
 
-  constructor(
-    private router: Router,
-    private AuthService: AuthService,
-    private storageservice: StorageService
-  ) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
-  ngOnInit(): void {
-    this.AuthService.getErrorSubject().subscribe((errorMessage) => {
-      this.isLoginFailed = true;
-      this.errorMessage = errorMessage;
+  ngOnInit(): void {}
+
+  onSubmit(): void {
+    const { email, password } = this.form;
+
+    this.authService.login(email, password).subscribe({
+      next: (data) => {
+        this.isLoginFailed = false;
+        this.isLoggedIn = true;
+      },
+      error: (err) => {
+        this.errorMessage = err.message;
+        this.isLoginFailed = true;
+      },
     });
-
-    if (this.storageservice.isLoggedIn()) {
-      this.isLoggedIn = true;
-      this.roles = this.storageservice.getUser().roles;
-    }
-  }
-
-  login() {
-    // console.log(this.user);
-    this.AuthService.login(this.user);
-    // .subscribe({
-    //   next: (data) => {
-    //     this.storageservice.saveUser(data);
-    //     if(this.userAutenticate) {
-
-    //     }
-    //     this.showMenuEmitter.emit(true);
-    //     // this.isLoginFailed = false;
-    //     // this.isLoggedIn = true;
-    //     // this.roles = this.storageservice.getUser().roles;
-    //   },
-    //   error: (err) => {
-    //     this.errorMessage = err.message;
-    //     this.isLoginFailed = true;
-    //   },
-    // });
-  }
-
-  reloadPage(): void {
-    window.location.reload();
   }
 }

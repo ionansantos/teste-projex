@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, Route } from '@angular/router';
-
+import { AuthService } from '../../services/auth.service';
 interface RouteData {
   title: string;
 }
@@ -13,7 +13,11 @@ interface RouteData {
 export class HeaderComponent {
   currentRoute: string | undefined;
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const firstChild = this.route.firstChild;
@@ -25,5 +29,15 @@ export class HeaderComponent {
         }
       }
     });
+  }
+  logoutSubmit() {
+    this.authService.logout().subscribe(
+      () => {
+        this.router.navigate(['/login']);
+      },
+      (error) => {
+        console.error('Logout error:', error);
+      }
+    );
   }
 }

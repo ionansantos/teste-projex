@@ -89,19 +89,20 @@ class AuthController extends Controller
     */
     public function login(AuthLoginRequest $request) 
     {
-
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
             $user = Auth::user();
+
+            $request->session()->regenerate();
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json(['user' =>  $user, 'token' => $token], 200);
         }
-    }
+
+        return response()->json(['message' => 'Credenciais inválidas'], 401);
+    }    
 
 
 
@@ -131,10 +132,8 @@ class AuthController extends Controller
      */
     public function logout(Request $request) 
     {
-        Auth::guard('sanctum')->user()->tokens()->delete();
+        $request->user()->tokens()->delete();
 
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        return response()->json(['message' => 'Logout successful'], 200);
     }
 }
