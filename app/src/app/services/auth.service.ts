@@ -1,8 +1,19 @@
 import { Router } from '@angular/router';
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, catchError, map, throwError } from 'rxjs';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import {
+  Observable,
+  Subject,
+  catchError,
+  finalize,
+  map,
+  throwError,
+} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -45,9 +56,36 @@ export class AuthService {
       catchError((error) => {
         console.error('Error:', error);
         return throwError(error);
+      }),
+      finalize(() => {
+        localStorage.removeItem('access_token');
       })
     );
   }
+
+  register(name: string, email: string, password: string): Observable<any> {
+    return this.http
+      .post(`${environment.API}/register`, { name, email, password })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError('deu ruim ao cadastrar');
+        })
+      );
+  }
+  // register(name: string, email: string, password: string): Observable<any> {
+  //   return this.http
+  //     .post(
+  //       `${environment.API}/register`,
+  //       { name, email, password },
+  //       this.httpOptions
+  //     )
+  //     .pipe(
+  //       map((response: any) => {
+  //         // this.router.navigate(['/login']);
+  //         return response;
+  //       })
+  //     );
+  // }
 
   // logout() {
   //   const token = localStorage.getItem('access_token');

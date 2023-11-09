@@ -13,7 +13,12 @@ import { FormsModule } from '@angular/forms';
 import { AuthGuard } from './guards/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
-// import { httpInterceptorProviders } from '../app/helpers/ http.interceptor';
+import { RegisterComponent } from './auth/register.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
+import { ToastrModule, provideToastr } from 'ngx-toastr';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,9 +28,17 @@ import { ProfileComponent } from './profile/profile.component';
     AuthComponent,
     SidebarComponent,
     ProfileComponent,
+    RegisterComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
-  providers: [AuthService, AuthGuard],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+  ],
+  providers: [AuthService, AuthGuard, provideAnimations(), provideToastr()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

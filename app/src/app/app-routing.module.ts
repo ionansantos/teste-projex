@@ -4,6 +4,7 @@ import { ImoveisComponent } from './imoveis/imoveis.component';
 import { HomeComponent } from './home/home.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AuthComponent } from './auth/auth.component';
+import { RegisterComponent } from './auth/register.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
@@ -12,6 +13,13 @@ const routes: Routes = [
     component: AuthComponent,
     data: {
       title: 'login',
+    },
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    data: {
+      title: 'register',
     },
   },
   {
@@ -27,7 +35,7 @@ const routes: Routes = [
       },
     ],
   },
-  // { path: '', redirectTo: '/home', pathMatch: 'full' },
+  // { path: '', redirectTo: '/', pathMatch: 'full' },
   { path: '**', redirectTo: '' },
 ];
 
