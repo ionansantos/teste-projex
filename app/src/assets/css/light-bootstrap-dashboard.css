@@ -869,6 +869,10 @@ body>.navbar-collapse[data-color="purple"]:after {
 }
 
 .btn {
+    cursor: pointer;
+}
+
+/* .btn {
     border-width: 2px;
     background-color: transparent;
     font-weight: 400;
@@ -1494,7 +1498,7 @@ fieldset[disabled] .btn-neutral.active {
     opacity: 1 !important;
     border-color: #3b5998;
     color: #3b5998;
-}
+} */
 
 .form-control::-moz-placeholder {
     color: #DDDDDD;

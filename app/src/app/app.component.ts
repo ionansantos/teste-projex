@@ -9,17 +9,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   title = 'teste-projex';
 
-  private roles: string[] = [];
   isLoggedIn = false;
-  showAdminBoard = false;
-  showModeratorBoard = false;
-  // showMenu: boolean = false;
 
-  constructor(private authService: AuthService) {}
-
-  ngOnInit() {
-    // this.authService.showMenuEmitter.subscribe(
-    //   (show) => (this.showMenu = show)
-    // );
-  }
+  constructor() {}
 }

@@ -1,2 +1,16 @@
-<p>home works!</p>
-<h2>asdasdsa</h2>
+<div class="container border rounded bg-light">
+  <div class="d-flex justify-content-between">
+    <h4>Lista de imoveis disponiveis</h4>
+    <div>
+      <button
+        type="button"
+        class="btn btn-success border mt-4"
+        (click)="openModal()"
+      >
+        Cadastrar
+      </button>
+    </div>
+  </div>
+  <hr />
+  <app-card-form></app-card-form>
+</div>

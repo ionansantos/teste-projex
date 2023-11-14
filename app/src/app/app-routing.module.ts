@@ -24,6 +24,7 @@ const routes: Routes = [
   },
   {
     path: '',
+    // data: { title: 'Bem Vindo' },
     component: SidebarComponent,
     canActivate: [AuthGuard],
     children: [

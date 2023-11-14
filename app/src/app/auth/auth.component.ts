@@ -32,7 +32,7 @@ export class AuthComponent implements OnInit {
         this.isLoggedIn = true;
       },
       error: (err) => {
-        this.errorMessage = err.message;
+        this.errorMessage = err.error.message;
         this.isLoginFailed = true;
       },
     });
