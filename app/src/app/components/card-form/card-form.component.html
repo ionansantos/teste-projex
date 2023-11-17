@@ -9,118 +9,134 @@
     ></button>
   </div>
   <div class="modal-body">
-    <form>
+    <form (ngSubmit)="f.form.valid && submitImovel()" #f="ngForm" novalidate>
       <div class="row">
         <div class="col-md-5 pr-1">
           <div class="form-group">
-            <label>Company (disabled)</label>
+            <label>Titulo</label>
             <input
               type="text"
               class="form-control"
-              disabled=""
-              placeholder="Company"
-              value="Creative Code Inc."
+              placeholder="casa av.torres"
+              [(ngModel)]="form.title"
+              name="title"
+              required
+              id="title"
+              #title="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && title.errors }"
             />
+            <div *ngIf="title.errors && f.submitted" class="invalid-feedback">
+              campo obrigatório!
+            </div>
           </div>
         </div>
-        <div class="col-md-3 px-1">
+        <div class="col-md-5">
           <div class="form-group">
-            <label>Username</label>
+            <label>imagem do imovel:</label>
             <input
-              type="text"
+              type="file"
               class="form-control"
-              placeholder="Username"
-              value="michael23"
+              [(ngModel)]="form.imagem"
+              name="imagem"
+              required
+              id="imagem"
+              #imagem="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && imagem.errors }"
             />
+            <div *ngIf="imagem.errors && f.submitted" class="invalid-feedback">
+              por favor selecione uma imagem!
+            </div>
           </div>
         </div>
-        <div class="col-md-4 pl-1">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" placeholder="Email" />
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">Descrição do Imovel</label>
+          <textarea
+            class="form-control"
+            id="exampleFormControlTextarea1"
+            rows="4"
+            cols="80"
+            placeholder="descrição do imovel a venda"
+            [(ngModel)]="form.description"
+            name="description"
+            required
+            id="description"
+            #description="ngModel"
+            [ngClass]="{ 'is-invalid': f.submitted && description.errors }"
+          ></textarea>
+          <div
+            *ngIf="description.errors && f.submitted"
+            class="invalid-feedback"
+          >
+            campo obrigatório!
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 pr-1">
+        <div class="col-md-4 pl-3">
           <div class="form-group">
-            <label>First Name</label>
+            <label>Preço de compra</label>
             <input
-              type="text"
+              type="number"
               class="form-control"
-              placeholder="Company"
-              value="Mike"
+              [(ngModel)]="form.price_purchase"
+              name="price_purchase"
+              required
+              id="price_purchase"
+              #price_purchase="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && price_purchase.errors }"
+              (ngModelChange)="calcularPercentualLucro()"
+              placeholder="R$: 100.0000"
             />
-          </div>
-        </div>
-        <div class="col-md-6 pl-1">
-          <div class="form-group">
-            <label>Last Name</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Last Name"
-              value="Andrew"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="form-group">
-            <label>Address</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Home Address"
-              value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4 pr-1">
-          <div class="form-group">
-            <label>City</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="City"
-              value="Mike"
-            />
-          </div>
-        </div>
-        <div class="col-md-4 px-1">
-          <div class="form-group">
-            <label>Country</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Country"
-              value="Andrew"
-            />
-          </div>
-        </div>
-        <div class="col-md-4 pl-1">
-          <div class="form-group">
-            <label>Postal Code</label>
-            <input type="number" class="form-control" placeholder="ZIP Code" />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="form-group">
-            <label>About Me</label>
-            <textarea
-              rows="4"
-              cols="80"
-              class="form-control"
-              placeholder="Here can be your description"
-              value="Mike"
+            <div
+              *ngIf="price_purchase.errors && f.submitted"
+              class="invalid-feedback"
             >
-Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea
+              campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 pl-3">
+          <div class="form-group">
+            <label>Preço de venda</label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="form.price_sale"
+              name="price_sale"
+              required
+              id="price_sale"
+              #price_sale="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && price_sale.errors }"
+              (ngModelChange)="calcularPercentualLucro()"
+              placeholder="R$: 200.0000"
+            />
+            <div
+              *ngIf="price_sale.errors && f.submitted"
+              class="invalid-feedback"
             >
+              campo obrigatório!
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 pl-3">
+          <div class="form-group">
+            <label>Percentual de lucro</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="form.percentage"
+              name="percentage"
+              required
+              id="percentage"
+              #percentage="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && percentage.errors }"
+              placeholder="ex: 45%"
+              [readonly]="true"
+            />
+            <div
+              *ngIf="percentage.errors && f.submitted"
+              class="invalid-feedback"
+            >
+              campo obrigatório!
+            </div>
           </div>
         </div>
       </div>

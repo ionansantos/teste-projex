@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ModalService } from '../services/serviceComponents/modal.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +6,5 @@ import { ModalService } from '../services/serviceComponents/modal.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  constructor(private ModalService: ModalService) {}
-
-  openModal() {
-    this.ModalService.openModal();
-  }
+  constructor() {}
 }

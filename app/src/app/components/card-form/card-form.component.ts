@@ -12,6 +12,15 @@ import { ModalService } from '../../services/serviceComponents/modal.service';
 export class CardFormComponent {
   @ViewChild('card_modal') cardModal!: TemplateRef<any>;
 
+  form: any = {
+    title: '',
+    imagem: '',
+    description: '',
+    price_purchase: null,
+    price_sale: null,
+    percentage: null,
+  };
+
   private subscription: Subscription;
 
   constructor(
@@ -30,4 +39,20 @@ export class CardFormComponent {
   open(content: TemplateRef<any>) {
     this.modalService.open(content, { size: 'lg' });
   }
+
+  calcularPercentualLucro() {
+    if (this.form.price_purchase && this.form.price_sale) {
+      const purchaseValue = parseFloat(this.form.price_purchase);
+      const valueSale = parseFloat(this.form.price_sale);
+
+      if (!isNaN(purchaseValue) && !isNaN(valueSale)) {
+        const profitPercentage =
+          ((valueSale - purchaseValue) / purchaseValue) * 100;
+
+        this.form.percentage = profitPercentage.toFixed(2) + '%';
+      }
+    }
+  }
+
+  submitImovel() {}
 }
