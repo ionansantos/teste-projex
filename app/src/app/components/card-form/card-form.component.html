@@ -9,141 +9,147 @@
     ></button>
   </div>
   <div class="modal-body">
-    <form (ngSubmit)="f.form.valid && submitImovel()" #f="ngForm" novalidate>
+    <form [formGroup]="form" (ngSubmit)="submitImovel()">
       <div class="row">
         <div class="col-md-5 pr-1">
           <div class="form-group">
             <label>Titulo</label>
             <input
+              formControlName="title"
               type="text"
+              id="title"
               class="form-control"
               placeholder="casa av.torres"
-              [(ngModel)]="form.title"
-              name="title"
-              required
-              id="title"
-              #title="ngModel"
-              [ngClass]="{ 'is-invalid': f.submitted && title.errors }"
             />
-            <div *ngIf="title.errors && f.submitted" class="invalid-feedback">
-              campo obrigatório!
+            <div
+              *ngIf="f['title'].touched && f['title'].invalid"
+              class="alert-input"
+            >
+              <div *ngIf="f['title'].errors?.['required']">
+                campo obrigatório
+              </div>
             </div>
           </div>
         </div>
         <div class="col-md-5">
           <div class="form-group">
-            <label>imagem do imovel:</label>
+            <label>imagens do imovel:</label>
             <input
               type="file"
+              formControlName="file"
               class="form-control"
-              [(ngModel)]="form.imagem"
-              name="imagem"
-              required
-              id="imagem"
-              #imagem="ngModel"
-              [ngClass]="{ 'is-invalid': f.submitted && imagem.errors }"
+              (change)="handleFileInput($event)"
+              name="imagens"
+              multiple=""
             />
-            <div *ngIf="imagem.errors && f.submitted" class="invalid-feedback">
-              por favor selecione uma imagem!
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="exampleFormControlTextarea1">Descrição do Imovel</label>
-          <textarea
-            class="form-control"
-            id="exampleFormControlTextarea1"
-            rows="4"
-            cols="80"
-            placeholder="descrição do imovel a venda"
-            [(ngModel)]="form.description"
-            name="description"
-            required
-            id="description"
-            #description="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && description.errors }"
-          ></textarea>
-          <div
-            *ngIf="description.errors && f.submitted"
-            class="invalid-feedback"
-          >
-            campo obrigatório!
-          </div>
-        </div>
-        <div class="col-md-4 pl-3">
-          <div class="form-group">
-            <label>Preço de compra</label>
-            <input
-              type="number"
-              class="form-control"
-              [(ngModel)]="form.price_purchase"
-              name="price_purchase"
-              required
-              id="price_purchase"
-              #price_purchase="ngModel"
-              [ngClass]="{ 'is-invalid': f.submitted && price_purchase.errors }"
-              (ngModelChange)="calcularPercentualLucro()"
-              placeholder="R$: 100.0000"
+            <img
+              *ngFor="let url of images"
+              [src]="url"
+              height="150"
+              width="200px"
+              style="margin: 3px"
             />
+            <br />
             <div
-              *ngIf="price_purchase.errors && f.submitted"
-              class="invalid-feedback"
+              *ngIf="f['file'].touched && f['file'].invalid"
+              class="alert-input"
             >
-              campo obrigatório!
+              <div *ngIf="f['file'].errors?.['required']">
+                campo obrigatório
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4 pl-3">
           <div class="form-group">
-            <label>Preço de venda</label>
-            <input
-              type="number"
+            <label for="exampleFormControlTextarea1">Descrição do Imovel</label>
+            <textarea
               class="form-control"
-              [(ngModel)]="form.price_sale"
-              name="price_sale"
-              required
-              id="price_sale"
-              #price_sale="ngModel"
-              [ngClass]="{ 'is-invalid': f.submitted && price_sale.errors }"
-              (ngModelChange)="calcularPercentualLucro()"
-              placeholder="R$: 200.0000"
-            />
+              id="description"
+              rows="4"
+              cols="80"
+              placeholder="descrição do imovel a venda"
+              formControlName="description"
+            ></textarea>
             <div
-              *ngIf="price_sale.errors && f.submitted"
-              class="invalid-feedback"
+              *ngIf="f['description'].touched && f['description'].invalid"
+              class="alert-input"
             >
-              campo obrigatório!
+              <div *ngIf="f['description'].errors?.['required']">
+                campo obrigatório
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 pl-3">
+            <div class="form-group">
+              <label>Preço de compra</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="purchase_price"
+                id="purchase_price"
+                currencyMask
+                (ngModelChange)="calcularPercentualLucro()"
+                placeholder="R$: 100.0000"
+              />
+              <div
+                *ngIf="
+                  f['purchase_price'].touched && f['purchase_price'].invalid
+                "
+                class="alert-input"
+              >
+                <div *ngIf="f['purchase_price'].errors?.['required']">
+                  campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 pl-3">
+            <div class="form-group">
+              <label>Preço de venda</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="sale_price"
+                id="sale_price"
+                currencyMask
+                (ngModelChange)="calcularPercentualLucro()"
+                placeholder="R$: 200.0000"
+              />
+              <div
+                *ngIf="f['sale_price'].touched && f['sale_price'].invalid"
+                class="alert-input"
+              >
+                <div *ngIf="f['sale_price'].errors?.['required']">
+                  campo obrigatório!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 pl-3">
+            <div class="form-group">
+              <label>Percentual de lucro</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="profit_percentage"
+                id="profit_percentage"
+                currencyMask
+                [options]="{
+                  prefix: '',
+                  suffix: '%',
+                  thousands: '.',
+                  decimal: ','
+                }"
+                placeholder="ex: 45%"
+                [readonly]="true"
+              />
             </div>
           </div>
         </div>
-        <div class="col-md-4 pl-3">
-          <div class="form-group">
-            <label>Percentual de lucro</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="form.percentage"
-              name="percentage"
-              required
-              id="percentage"
-              #percentage="ngModel"
-              [ngClass]="{ 'is-invalid': f.submitted && percentage.errors }"
-              placeholder="ex: 45%"
-              [readonly]="true"
-            />
-            <div
-              *ngIf="percentage.errors && f.submitted"
-              class="invalid-feedback"
-            >
-              campo obrigatório!
-            </div>
-          </div>
-        </div>
+        <button type="submit" class="btn btn-success btn-fill pull-right">
+          Pronto
+        </button>
+        <div class="clearfix"></div>
       </div>
-      <button type="submit" class="btn btn-success btn-fill pull-right">
-        Pronto
-      </button>
-      <div class="clearfix"></div>
     </form>
   </div>
 </ng-template>

@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 import { AppComponent } from './app.component';
 import { ImoveisComponent } from './imoveis/imoveis.component';
@@ -41,6 +42,7 @@ import { AuthGuard } from './guards/auth.guard';
     HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    CurrencyMaskModule,
     ToastrModule.forRoot({
       timeOut: 15000,
       closeButton: true,
