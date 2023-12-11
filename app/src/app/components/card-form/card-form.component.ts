@@ -19,15 +19,15 @@ import {
 export class CardFormComponent {
   @ViewChild('card_modal') cardModal!: TemplateRef<any>;
 
-  images = [];
+  images: any = [];
   form = new FormGroup({
     title: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     file: new FormControl('', [Validators.required]),
+    fileSource: new FormControl('', [Validators.required]),
     purchase_price: new FormControl('', [Validators.required]),
     sale_price: new FormControl('', [Validators.required]),
     profit_percentage: new FormControl('', [Validators.required]),
-    fileSource: new FormControl('', [Validators.required]),
 
     // Adicione outras propriedades do formulário conforme necessário
   });
@@ -75,16 +75,16 @@ export class CardFormComponent {
   handleFileInput(event: any) {
     if (event.target.files && event.target.files[0]) {
       let filesAmount = event.target.files.length;
-      console.log(filesAmount);
 
       for (let i = 0; i < filesAmount; i++) {
         let reader = new FileReader();
         reader.onload = (event: any) => {
-          console.log('====================================');
-          console.log(event.target.result, 'sdads');
-          console.log('====================================');
-          // this.images.push(event.target.result);
+          this.images.push(event.target.result);
+          this.form.patchValue({
+            fileSource: this.images,
+          });
         };
+        reader.readAsDataURL(event.target.files[i]);
       }
     }
     // const reader = new FileReader();
@@ -128,6 +128,7 @@ export class CardFormComponent {
   // }
 
   submitImovel(): void {
+    console.log(this.form.value);
     // const formData = new FormData();
     // formData.append('title', this.form.title);
     // formData.append('imagens', this.form.imagens);
