@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ImovelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,5 +26,7 @@ Route::post('login', [AuthController::class, 'login']);
 
 
 Route::middleware('auth:sanctum')->group(function(){  
+    Route::post('imovel/create', [ImovelController::class, 'create']);
     Route::post('logout', [AuthController::class, 'logout']); 
+    Route::get('getImovel', [ImovelController::class, 'show']);
 });

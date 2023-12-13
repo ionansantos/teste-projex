@@ -173,6 +173,109 @@
                     }
                 ]
             }
+        },
+        "/api/create": {
+            "post": {
+                "tags": [
+                    "imovel"
+                ],
+                "summary": "Create Imovel",
+                "description": "Create a new imovel with the following fields:\n     - `title`\n    - `description`\n    - `purchase_price`\n    - `sale_price`\n    - `profit_percentage`\n    - `in_stock`\n    - `imagem`\n    - `user_id`\n\n    ![Imagem Exemplo](https://example.com/sua-imagem.jpg)",
+                "operationId": "createImovel",
+                "requestBody": {
+                    "description": "Imovel data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "purchase_price",
+                                    "sale_price",
+                                    "profit_percentage",
+                                    "in_stock",
+                                    "imagem",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Nome do Imóvel"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Descrição do Imóvel"
+                                    },
+                                    "purchase_price": {
+                                        "type": "number",
+                                        "example": 100000
+                                    },
+                                    "sale_price": {
+                                        "type": "number",
+                                        "example": 120000
+                                    },
+                                    "profit_percentage": {
+                                        "type": "number",
+                                        "example": 20
+                                    },
+                                    "in_stock": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "imagem": {
+                                        "type": "string",
+                                        "example": "nome-do-arquivo.jpg"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Imovel created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Imovel cadastrado com sucesso!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error creating imovel",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Error message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

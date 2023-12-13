@@ -18,10 +18,11 @@ return new class extends Migration
             $table->decimal('purchase_price', 10, 2);
             $table->decimal('sale_price', 10, 2);
             $table->decimal('profit_percentage', 5, 2);
-            $table->integer('in_stock');
+            $table->boolean('in_stock');
             $table->string('imagem', 100)->comment('Logo do Imovel');
             $table->unsignedBigInteger('user_id')->nullable(); // Adicionando a coluna user_id
-
+            $table->timestamps();
+            
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

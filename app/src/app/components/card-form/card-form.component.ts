@@ -28,8 +28,6 @@ export class CardFormComponent {
     purchase_price: new FormControl('', [Validators.required]),
     sale_price: new FormControl('', [Validators.required]),
     profit_percentage: new FormControl('', [Validators.required]),
-
-    // Adicione outras propriedades do formulário conforme necessário
   });
 
   private subscription: Subscription;
@@ -44,8 +42,8 @@ export class CardFormComponent {
     config.backdrop = 'static';
     config.keyboard = false;
 
-    this.subscription = this.modalState.openModal$.subscribe(
-      () => this.open(this.cardModal) // Alterado para usar a referência do template
+    this.subscription = this.modalState.openModal$.subscribe(() =>
+      this.open(this.cardModal)
     );
   }
 
@@ -72,60 +70,66 @@ export class CardFormComponent {
     }
   }
 
-  handleFileInput(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      let filesAmount = event.target.files.length;
+  handleFileInput(event: any, inputId: any, areaInput: any, fileName: string) {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    const spanFileName = document.getElementById(fileName);
 
-      for (let i = 0; i < filesAmount; i++) {
-        let reader = new FileReader();
-        reader.onload = (event: any) => {
-          this.images.push(event.target.result);
-          this.form.patchValue({
-            fileSource: this.images,
-          });
-        };
-        reader.readAsDataURL(event.target.files[i]);
-      }
+    if (input.files?.length) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const fileUpload = document.getElementById(areaInput);
+        const fileName = input.files?.[0].name;
+
+        if (fileUpload) {
+          fileUpload.style.backgroundImage = `url(${e.target?.result})`;
+          fileUpload.style.backgroundSize = `cover`;
+        }
+        if (spanFileName && fileName) spanFileName.innerHTML = fileName;
+      };
+
+      this.images.push(event.target.result);
+      this.form.patchValue({
+        fileSource: this.images,
+      });
+      reader.readAsDataURL(input.files[0]);
     }
-    // const reader = new FileReader();
-    // if (event.target.files && event.target.files.length) {
-    //   const [file] = event.target.files;
-    //   reader.readAsDataURL(file);
-    //   reader.onload = () => {
-    //     this.form.imagem = file;
+
+    // if (event.target.files && event.target.files.length > 0) {
+    //   const file = event.target.files[0];
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     if (labelElement) {
+    //       console.log(labelElement);
+    //       labelElement.style.backgroundImage = `url(${e.target?.result})`;
+    //     }
+    //     if (spanElement) {
+    //       spanElement.textContent = file.name;
+    //     }
     //   };
+    //   reader.readAsDataURL(file);
+    // } else {
+    //   if (labelElement) {
+    //     labelElement.style.backgroundImage = 'none';
+    //   }
+    //   if (spanElement) {
+    //     spanElement.textContent = 'sem anexo';
+    //   }
+    // }
+    // if (event.target.files && event.target.files[0]) {
+    //   let filesAmount = event.target.files.length;
+    //   for (let i = 0; i < filesAmount; i++) {
+    //     let reader = new FileReader();
+    //     reader.onload = (event: any) => {
+    //       this.images.push(event.target.result);
+    //       this.form.patchValue({
+    //         fileSource: this.images,
+    //       });
+    //     };
+    //     reader.readAsDataURL(event.target.files[i]);
+    //   }
     // }
   }
-
-  // handleFileInput(files: File[]) {
-  //   this.form.imagens = files;
-  //   for (const file of files) {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-
-  //     reader.onload = () => {
-  //       console.log(reader.result);
-  //     };
-  //   }
-  // }
-
-  // handleFileInput(event: any) {
-  //   const reader = new FileReader();
-
-  //   if (event.target.files && event.target.files.length) {
-  //     const files = event.target.files;
-  //     this.form.imagens = Array.from(files);
-  //     console.log(this.form.imagens);
-
-  //     for (const file of files) {
-  //       reader.readAsDataURL(file);
-
-  //       reader.onload = () => {
-  //         console.log(reader.result);
-  //       };
-  //     }
-  //   }
-  // }
 
   submitImovel(): void {
     console.log(this.form.value);
