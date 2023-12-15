@@ -19,12 +19,12 @@ import {
 export class CardFormComponent {
   @ViewChild('card_modal') cardModal!: TemplateRef<any>;
 
+  showErrorMsg: boolean = false;
   images: any = [];
   form = new FormGroup({
     title: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     file: new FormControl('', [Validators.required]),
-    fileSource: new FormControl('', [Validators.required]),
     purchase_price: new FormControl('', [Validators.required]),
     sale_price: new FormControl('', [Validators.required]),
     profit_percentage: new FormControl('', [Validators.required]),
@@ -73,6 +73,7 @@ export class CardFormComponent {
   handleFileInput(event: any, inputId: any, areaInput: any, fileName: string) {
     const input = document.getElementById(inputId) as HTMLInputElement;
     const spanFileName = document.getElementById(fileName);
+    const files = event.target.files;
 
     if (input.files?.length) {
       const reader = new FileReader();
@@ -88,58 +89,46 @@ export class CardFormComponent {
         if (spanFileName && fileName) spanFileName.innerHTML = fileName;
       };
 
-      this.images.push(event.target.result);
-      this.form.patchValue({
-        fileSource: this.images,
-      });
       reader.readAsDataURL(input.files[0]);
-    }
 
-    // if (event.target.files && event.target.files.length > 0) {
-    //   const file = event.target.files[0];
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     if (labelElement) {
-    //       console.log(labelElement);
-    //       labelElement.style.backgroundImage = `url(${e.target?.result})`;
-    //     }
-    //     if (spanElement) {
-    //       spanElement.textContent = file.name;
-    //     }
-    //   };
-    //   reader.readAsDataURL(file);
-    // } else {
-    //   if (labelElement) {
-    //     labelElement.style.backgroundImage = 'none';
-    //   }
-    //   if (spanElement) {
-    //     spanElement.textContent = 'sem anexo';
-    //   }
-    // }
-    // if (event.target.files && event.target.files[0]) {
-    //   let filesAmount = event.target.files.length;
-    //   for (let i = 0; i < filesAmount; i++) {
-    //     let reader = new FileReader();
-    //     reader.onload = (event: any) => {
-    //       this.images.push(event.target.result);
-    //       this.form.patchValue({
-    //         fileSource: this.images,
-    //       });
-    //     };
-    //     reader.readAsDataURL(event.target.files[i]);
-    //   }
-    // }
+      // adiciona as imagens no array images
+      for (let i = 0; i < files.length; i++) {
+        this.images.push(files[i]);
+      }
+    }
   }
 
   submitImovel(): void {
-    console.log(this.form.value);
-    // const formData = new FormData();
-    // formData.append('title', this.form.title);
-    // formData.append('imagens', this.form.imagens);
-    // formData.append('description', this.form.description);
-    // formData.append('purchase_price', this.form.purchase_price);
-    // formData.append('sale_price', this.form.sale_price);
-    // formData.append('profit_percentage', this.form.profit_percentage);
-    // this.imovelService.register(formData).subscribe(() => {});
+    const formData = new FormData();
+
+    formData.append('title', this.form.get('title')?.value?.toString() ?? '');
+    formData.append(
+      'description',
+      this.form.get('description')?.value?.toString() ?? ''
+    );
+    formData.append(
+      'purchase_price',
+      this.form.get('purchase_price')?.value?.toString() ?? ''
+    );
+    formData.append(
+      'sale_price',
+      this.form.get('sale_price')?.value?.toString() ?? ''
+    );
+    formData.append(
+      'profit_percentage',
+      this.form.get('profit_percentage')?.value?.toString() ?? ''
+    );
+
+    for (let i = 0; i < this.images.length; i++) {
+      formData.append('images', this.images[i]);
+    }
+
+    Object.keys(this.form.controls).forEach((key) => {
+      this.form.get(key)?.markAsTouched();
+    });
+
+    if (this.form.valid) {
+      this.imovelService.register(formData).subscribe(() => {});
+    }
   }
 }

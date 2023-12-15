@@ -31,105 +31,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-5">
-          <div class="form-group">
-            <h4>imagens do imovel:</h4>
-            <div class="row my-2 justify-content-center align-items-center">
-              <div class="col-4">
-                <label
-                  id="area-file-upload-1"
-                  for="file-upload-1"
-                  class="custom-file-upload d-flex flex-column justify-content-end align-items-center"
-                >
-                  <i class="fa fa-cloud-upload" style="font-size: 20pt"></i>
-                  <span
-                    class="fw-light text-truncate"
-                    id="file-upload-name-1"
-                    style="font-size: 9pt; max-width: 150px"
-                    >sem anexo</span
-                  >
-                </label>
-                <input
-                  id="file-upload-1"
-                  type="file"
-                  style="display: none"
-                  (change)="
-                    handleFileInput(
-                      $event,
-                      'file-upload-1',
-                      'area-file-upload-1',
-                      'file-upload-name-1'
-                    )
-                  "
-                />
-              </div>
-              <div class="col-4">
-                <label
-                  id="area-file-upload-2"
-                  for="file-upload-2"
-                  class="custom-file-upload d-flex flex-column justify-content-end align-items-center"
-                >
-                  <i class="fa fa-cloud-upload" style="font-size: 20pt"></i>
-                  <span
-                    class="fw-light text-truncate"
-                    id="file-upload-name-2"
-                    style="font-size: 9pt; max-width: 150px"
-                    >sem anexo</span
-                  >
-                </label>
-                <input
-                  id="file-upload-2"
-                  type="file"
-                  style="display: none"
-                  (change)="
-                    handleFileInput(
-                      $event,
-                      'file-upload-2',
-                      'area-file-upload-2',
-                      'file-upload-name-2'
-                    )
-                  "
-                />
-              </div>
-              <div class="col-4">
-                <label
-                  id="area-file-upload-3"
-                  for="file-upload-3"
-                  class="custom-file-upload d-flex flex-column justify-content-end align-items-center"
-                >
-                  <i class="fa fa-cloud-upload" style="font-size: 20pt"></i>
-                  <span
-                    class="fw-light text-truncate"
-                    id="file-upload-name-3"
-                    style="font-size: 9pt; max-width: 150px"
-                    >sem anexo</span
-                  >
-                </label>
-                <input
-                  id="file-upload-3"
-                  type="file"
-                  style="display: none"
-                  (change)="
-                    handleFileInput(
-                      $event,
-                      'file-upload-3',
-                      'area-file-upload-3',
-                      'file-upload-name-3'
-                    )
-                  "
-                />
-              </div>
-            </div>
-            <div
-              *ngIf="f['file'].touched && f['file'].invalid"
-              class="alert-input"
-            >
-              <div *ngIf="f['file'].errors?.['required']">
-                campo obrigatório
-              </div>
-            </div>
-          </div>
-
+        <div class="row">
           <div class="form-group">
             <label for="exampleFormControlTextarea1">Descrição do Imovel</label>
             <textarea
@@ -213,6 +115,102 @@
                 placeholder="ex: 45%"
                 [readonly]="true"
               />
+            </div>
+          </div>
+          <!-- IMAGENS IMOVEIS -->
+          <div class="form-group">
+            <h4>imagens do imovel:</h4>
+            <div class="row my-2 justify-content-center align-items-center">
+              <div class="col-4">
+                <label
+                  id="area-file-upload-1"
+                  for="file-upload-1"
+                  class="custom-file-upload d-flex flex-column justify-content-end align-items-center"
+                >
+                  <i class="fa fa-cloud-upload" style="font-size: 20pt"></i>
+                  <span
+                    class="fw-light text-truncate"
+                    id="file-upload-name-1"
+                    style="font-size: 9pt; max-width: 150px"
+                    >sem anexo</span
+                  >
+                </label>
+                <input
+                  formControlName="file"
+                  id="file-upload-1"
+                  type="file"
+                  style="display: none"
+                  (change)="
+                    handleFileInput(
+                      $event,
+                      'file-upload-1',
+                      'area-file-upload-1',
+                      'file-upload-name-1'
+                    )
+                  "
+                />
+              </div>
+              <div class="col-4">
+                <label
+                  id="area-file-upload-2"
+                  for="file-upload-2"
+                  class="custom-file-upload d-flex flex-column justify-content-end align-items-center"
+                >
+                  <i class="fa fa-cloud-upload" style="font-size: 20pt"></i>
+                  <span
+                    class="fw-light text-truncate"
+                    id="file-upload-name-2"
+                    style="font-size: 9pt; max-width: 150px"
+                    >sem anexo</span
+                  >
+                </label>
+                <input
+                  formControlName="file"
+                  id="file-upload-2"
+                  type="file"
+                  style="display: none"
+                  (change)="
+                    handleFileInput(
+                      $event,
+                      'file-upload-2',
+                      'area-file-upload-2',
+                      'file-upload-name-2'
+                    )
+                  "
+                />
+              </div>
+              <div class="col-4">
+                <label
+                  id="area-file-upload-3"
+                  for="file-upload-3"
+                  class="custom-file-upload d-flex flex-column justify-content-end align-items-center"
+                >
+                  <i class="fa fa-cloud-upload" style="font-size: 20pt"></i>
+                  <span
+                    class="fw-light text-truncate"
+                    id="file-upload-name-3"
+                    style="font-size: 9pt; max-width: 150px"
+                    >sem anexo</span
+                  >
+                </label>
+                <input
+                  formControlName="file"
+                  id="file-upload-3"
+                  type="file"
+                  style="display: none"
+                  (change)="
+                    handleFileInput(
+                      $event,
+                      'file-upload-3',
+                      'area-file-upload-3',
+                      'file-upload-name-3'
+                    )
+                  "
+                />
+              </div>
+            </div>
+            <div *ngIf="showErrorMsg" class="col-4 text-danger">
+              Nenhuma imagem selecionada.
             </div>
           </div>
         </div>
