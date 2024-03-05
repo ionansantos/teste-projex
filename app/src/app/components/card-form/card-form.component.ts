@@ -99,35 +99,41 @@ export class CardFormComponent {
   }
 
   submitImovel(): void {
-    const formData = new FormData();
-
-    formData.append('title', this.form.get('title')?.value?.toString() ?? '');
-    formData.append(
-      'description',
-      this.form.get('description')?.value?.toString() ?? ''
-    );
-    formData.append(
-      'purchase_price',
-      this.form.get('purchase_price')?.value?.toString() ?? ''
-    );
-    formData.append(
-      'sale_price',
-      this.form.get('sale_price')?.value?.toString() ?? ''
-    );
-    formData.append(
-      'profit_percentage',
-      this.form.get('profit_percentage')?.value?.toString() ?? ''
-    );
-
-    for (let i = 0; i < this.images.length; i++) {
-      formData.append('images', this.images[i]);
-    }
-
+    // Marca apenas os campos inválidos como "touched"
     Object.keys(this.form.controls).forEach((key) => {
-      this.form.get(key)?.markAsTouched();
+      const control = this.form.get(key);
+      if (control && control.invalid) {
+        control.markAsTouched();
+      }
     });
 
+    // Se o formulário for inválido, não passa os dados para o service
     if (this.form.valid) {
+      const formData = new FormData();
+
+      formData.append('title', this.form.get('title')?.value?.toString() ?? '');
+      formData.append(
+        'description',
+        this.form.get('description')?.value?.toString() ?? ''
+      );
+      formData.append(
+        'purchase_price',
+        this.form.get('purchase_price')?.value?.toString() ?? ''
+      );
+      formData.append(
+        'sale_price',
+        this.form.get('sale_price')?.value?.toString() ?? ''
+      );
+      formData.append(
+        'profit_percentage',
+        this.form.get('profit_percentage')?.value?.toString() ?? ''
+      );
+
+      for (let i = 0; i < this.images.length; i++) {
+        formData.append('images', this.images[i], this.images[i].name);
+      }
+
+      // Envie os dados para o serviço
       this.imovelService.register(formData).subscribe(() => {});
     }
   }

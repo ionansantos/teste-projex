@@ -12,10 +12,9 @@ class ImovelController extends Controller
     public function create(Request $request) {
 
         $user = Auth::user();
-
-        return response()->json(['data' => $request->all()], 200);
-        $imagem = $request->file('imagem');
         
+        $imagem = $request->file('imagem');
+        dd($imagem);
         if ($imagem) {
             $imagem_urn = $imagem->store('imagens', 'public');
         
